@@ -1,0 +1,32 @@
+services:
+  # nodejs application with mongodb
+  backend:
+    build: .
+    container_name: nodejs
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - PORT=$PORT
+      - MONGO_URI=$MONGO_URI
+      - NODE_ENV=$NODE_ENV
+      - JWT_TOKEN=$JWT_TOKEN
+      - DB_NAME=$DB_NAME
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+  
+  # mongodb
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
